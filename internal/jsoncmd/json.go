@@ -23,13 +23,11 @@ func runJson(cmd *cobra.Command, args []string) error {
 		// todo 待实现
 	}
 
-	logger.Infoln("什么也没做")
+	zap.L().Info("什么也没做")
 	return nil
 }
 
 var (
-	logger = zap.S()
-
 	data      string
 	dataFile  string
 	pretty    bool
@@ -82,6 +80,6 @@ func printValue(v any) error {
 		}
 		data = marshal
 	}
-	logger.Infoln(data)
+	zap.L().Info(data)
 	return nil
 }

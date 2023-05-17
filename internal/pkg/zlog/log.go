@@ -33,14 +33,17 @@ func New(options ...zap.Option) (*zap.Logger, error) {
 func defaultZapConfig() (cfg zap.Config) {
 	if debug.Load() {
 		cfg = zap.NewDevelopmentConfig()
-		cfg.EncoderConfig.FunctionKey = "func"     // 打印调用函数
-		cfg.EncoderConfig.EncodeTime = timeEncoder // 日志时间戳使用指定格式
+		cfg.EncoderConfig.FunctionKey = "func" // 打印调用函数
 	} else {
-		cfg = zap.NewProductionConfig()
-		cfg.EncoderConfig.TimeKey = ""
+		cfg = zap.NewDevelopmentConfig()
+		cfg.Level = zap.NewAtomicLevelAt(zap.InfoLevel)
 		cfg.EncoderConfig.NameKey = ""
 		cfg.EncoderConfig.CallerKey = ""
 	}
+
+	cfg.OutputPaths = []string{"stdout"}
+	cfg.ErrorOutputPaths = []string{"stdout"}
+	cfg.EncoderConfig.TimeKey = ""
 
 	cfg.Sampling = nil                                               // 禁用采样
 	cfg.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder // 日志级别设为大写，使用不同的输出颜色
@@ -49,8 +52,6 @@ func defaultZapConfig() (cfg zap.Config) {
 
 	return
 }
-
-var timeEncoder = zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05.000")
 
 func jsonEncoder(w io.Writer) zapcore.ReflectedEncoder {
 	return cjson.NewEncoder(w, cjson.SetEscapeHTML(false))

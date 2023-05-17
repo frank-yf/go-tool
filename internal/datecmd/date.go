@@ -47,8 +47,6 @@ var (
 	output    string
 	layout    string
 	location  string
-
-	logger = zap.S()
 )
 
 func Init(rootCmd *cobra.Command) {
@@ -91,17 +89,17 @@ func printTime(t time.Time) error {
 		if layout == "" {
 			return errors.New("output='format' 必须指定 layout 参数")
 		}
-		logger.Infoln(t.Format(layout))
+		zap.L().Info(t.Format(layout))
 	case timeOutputTypeTimestamp:
 		ts, err := formatTimestamp(t, duration)
 		if err != nil {
 			return err
 		}
-		logger.Infoln(ts)
+		zap.S().Infoln(ts)
 	case timeOutputTypeGoString:
-		logger.Infoln(t.GoString())
+		zap.L().Info(t.GoString())
 	case timeOutputTypeStringer:
-		logger.Infoln(t)
+		zap.S().Infoln(t)
 	default:
 		return fmt.Errorf("不支持的 output '%s'", output)
 	}
