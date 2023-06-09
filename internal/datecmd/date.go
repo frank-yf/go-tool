@@ -68,7 +68,7 @@ func Init(rootCmd *cobra.Command) {
 	dateCmd.Flags().
 		DurationVarP(&duration, "duration", "d", time.Millisecond, "时间单位")
 	dateCmd.Flags().
-		StringVar(&output, "output", timeOutputTypeStringer, "时间输出格式")
+		StringVar(&output, "output", timeOutputTypeStringer, "时间输出格式[stringer,format,goString,ts]")
 	dateCmd.Flags().
 		StringVarP(&layout, "layout", "l", time.RFC3339Nano, "时间格式化")
 	dateCmd.Flags().
